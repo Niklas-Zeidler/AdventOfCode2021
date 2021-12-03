@@ -53,33 +53,30 @@ fn task2() {
         let temp = u32::from_str_radix(line, 2).unwrap();
         array[i] = temp as u32;
     }
-    let  best_epsilon : u32 = search_for_closest_element(array, size,true);
-    // let  best_gamma : u32 = search_for_closest_element(array.to_vec(), size,false);
-    // println!("oxygen generator rating: {}", best_epsilon);
-    // println!("co2 scrubber rating : {}", best_gamma);
-    // println!("solution task2 : {}", best_gamma * best_epsilon);
+    array.retain(|&x| x != 0);
+    let  best_epsilon : u32 = search_for_closest_element(array.to_vec(), size,true);
+    let  best_gamma : u32 = search_for_closest_element(array.to_vec(), size,false);
+    println!("test oxygen generator rating: {}", best_epsilon);
+    println!("test co2 scrubber rating : {}", best_gamma);
+    println!("test solution task2 : {}", best_gamma * best_epsilon);
 
     // 
-    // let  best_epsilon : u32 = search_for_closest_element(array.to_vec(), epsilon, size,true);
-    // let  best_gamma : u32 = search_for_closest_element(array,gamma,size,false);
+    let contents = fs::read_to_string("input.txt")
+        .expect("Something went wrong reading the file");
 
-    // let gamma = 784;
-    // let epsilon = 3311;
-    // let contents = fs::read_to_string("input.txt")
-    //     .expect("Something went wrong reading the file");
-
-    // let mut array = vec![0;contents.len()];
-    // let size : usize = 12;
-    // for (i, line) in contents.lines().enumerate(){
-    //     let temp = u32::from_str_radix(line, 2).unwrap();
-    //     array[i] = temp as u32;
-    // }
-    // let  best_epsilon : u32 = search_for_closest_element(array.to_vec(), epsilon, size,true);
-    // let  best_gamma : u32 = search_for_closest_element(array,gamma,size,false);
+    let mut array = vec![0;contents.len()];
+    let size : usize = 12;
+    for (i, line) in contents.lines().enumerate(){
+        let temp = u32::from_str_radix(line, 2).unwrap();
+        array[i] = temp as u32;
+    }
+    array.retain(|&x| x != 0);
+    let  best_epsilon : u32 = search_for_closest_element(array.to_vec(), size,true);
+    let  best_gamma : u32 = search_for_closest_element(array.to_vec(),size,false);
     
-    // println!("oxygen generator rating: {}", best_epsilon);
-    // println!("co2 scrubber rating : {}", best_gamma);
-    // println!("solution task2 : {}", best_gamma * best_epsilon);
+    println!("oxygen generator rating: {}", best_epsilon);
+    println!("co2 scrubber rating : {}", best_gamma);
+    println!("solution task2 : {}", best_gamma * best_epsilon);
 
     
 }
@@ -88,26 +85,28 @@ fn search_for_closest_element(mut array : Vec<u32>,bit_range:usize,modifier : bo
     let two : u32 = 2;
     let mut more_than_one_number = true;
     let mut comparing_value :u32;
+    let mut sum : u32;
     while more_than_one_number {
         for shift in (0..bit_range).rev() {
             let bit_selector =  two.pow(shift as u32);
-            let mut sum = 0;
-
+            sum = 0;
             for remaining in array.iter(){
-                sum = (remaining & bit_selector) + sum;
-                println!("{}",remaining);
+                sum = (*remaining & bit_selector) + sum;
             }
             comparing_value = 0;
+            println!("{}",(sum as f32) / (array.len() as f32) / (bit_selector as f32));
+            let old_array = array.to_vec();
             if modifier {
                 if ((sum as f32) / (array.len() as f32 * bit_selector as f32)) >= 0.5 { comparing_value = bit_selector;}
+                array.retain(|&x| !((x & bit_selector) > 0)^((comparing_value & bit_selector) > 0));
             }
             else{
-                if ((sum as f32) / (array.len() as f32 * bit_selector as f32)) > 0.5 { comparing_value = bit_selector;}
+                if ((sum as f32) / (array.len() as f32 * bit_selector as f32)) < 0.5 { comparing_value = bit_selector;}
+                array.retain(|&x| !((x & bit_selector) > 0)^((comparing_value & bit_selector) > 0));
             }
-            let old_array = array.to_vec();
-            array.retain(|&x| !((x & bit_selector) > 0)^((comparing_value & bit_selector) > 0));
+            
             // if shift < two.pow(3).try_into().unwrap()  {println!("{:?}", array);}
-            // println!("shift : {}, comparing value: {}, length : {}",shift,comparing_value, array.len());
+            println!("shift : {}, comparing value: {}, length : {}",shift,comparing_value, array.len());
             if array.len() == 0 {
                 array = old_array;
                 more_than_one_number = false;
