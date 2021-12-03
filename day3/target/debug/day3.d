@@ -1,1 +1,1 @@
-/home/nik/Coding/AdventOfCode2021/day3/target/debug/day3: /home/nik/Coding/AdventOfCode2021/day3/src/main.rs
+C:\Users\NiklasZeidler\source\repos\AdventOfCode2021\day3\target\debug\day3.exe: C:\Users\NiklasZeidler\source\repos\AdventOfCode2021\day3\src\main.rs
