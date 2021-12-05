@@ -84,6 +84,7 @@ fn main() {
                     }}   
             }
             if row[2] < row[3]{
+                
                 for i in row[2]..row[3]+1{
 
                 }
