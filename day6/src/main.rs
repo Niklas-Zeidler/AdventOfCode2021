@@ -27,7 +27,7 @@ fn task1() {
         fish_vec.extend(vec![8;new_fish]);
         // println!("day: {},amount of fish:{}",day,fish_vec.len());
     }
-    println!("task 1 : day: {},amount of fish:{}",amount_of_days,fish_vec.len());
+    println!("task 1 : day: {},amount of fish: {}",amount_of_days,fish_vec.len());
 }
 fn task2(){
     let amount_of_days = 256;
