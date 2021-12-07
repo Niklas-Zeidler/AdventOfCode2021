@@ -40,10 +40,6 @@ fn task2() {
         input_vec[i] = i32::from_str_radix(number, 10).unwrap();
 
     }
-    let mut is_falling = true;
-    let mut position :i32 = 2;
-    let mut fuel_cost = 1000*input_vec.len() as i32;
-    let mut fuel_cost_old : i32;
     let mut fuel_cost_per_steps : std::vec::Vec<usize>= vec![0;30000];
     fuel_cost_per_steps[1] = 1;
     let max_value = input_vec.iter().max().unwrap().abs() as usize;
@@ -54,11 +50,12 @@ fn task2() {
     }
     let mut fuel_cost_min = 1000000000;
     let mut position_min : usize = 0;
+    let mut fuel_cost : usize;
     for position in 0..max_value as usize {
         fuel_cost = 0;
         for element in input_vec.iter(){
             let steps = element - position as i32;
-            fuel_cost += fuel_cost_per_steps[steps.abs() as usize] as i32;
+            fuel_cost += fuel_cost_per_steps[steps.abs() as usize];
         }
         if fuel_cost_min > fuel_cost{
             fuel_cost_min = fuel_cost;
